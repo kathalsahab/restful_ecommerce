@@ -10,9 +10,6 @@ services:
          - network_ecom
       env_file:
          - .env
-      #command: gunicorn -w 5 -t 30 -b 0.0.0.0:5000 "ecom:create_app()"
-      links:
-         - redis
       # volumes - DEV only - to enable reloading of dev server on file changes
       volumes:
          - ./ecom:/app/ecom

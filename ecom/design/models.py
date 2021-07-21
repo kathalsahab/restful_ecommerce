@@ -26,9 +26,6 @@ from ecom.utils import (
 )
 from sqlalchemy import and_
 from sqlalchemy.types import String
-from ecom.constants import (
-    CATEGORY_FLAG_CATEGORY_TABLE,
-)
 
 
 def build_constraints(
@@ -123,15 +120,12 @@ class Category(db.Model):
         category_name,
         category_desc=None,
         parent_id=None,
-        category_type_flag=None,
     ):
         # TODO: Need to check the duplicate record issue
-        if parent_id is None:
-            return
         category = Category.query.filter_by(
             category_name=category_name,
             is_active=True,
-            parent_id=parent_id,
+            category_parent_id=parent_id,
         ).first()
 
         if category:
@@ -141,11 +135,9 @@ class Category(db.Model):
 
         category.category_name = category_name
         if parent_id is not None:
-            category.parent_id = parent_id
+            category.category_parent_id = parent_id
         if category_desc is not None:
             category.category_desc = category_desc
-        if category_type_flag is not None:
-            category.category_type_flag = category_type_flag
 
         db.session.add(category)
         db.session.commit()
@@ -220,10 +212,7 @@ class CategoryToProductMap(db.Model):
     )
 
     category = relationship("Category", backref="category_map", lazy=True)
-    module = relationship("Module", backref="category_map", lazy=True)
-    sme_category_map = relationship(
-        "SmeCategoryMap", backref="category_map", lazy=True, uselist=True, viewonly=True
-    )
+    product = relationship("Product", backref="category_map", lazy=True)
 
     @classmethod
     def lookup(cls, cat_mapping_id):

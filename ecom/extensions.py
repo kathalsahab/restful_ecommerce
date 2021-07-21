@@ -1,5 +1,3 @@
-import logging
-
 from flask_sqlalchemy import SQLAlchemy as _BaseSQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS

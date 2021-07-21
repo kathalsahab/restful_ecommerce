@@ -146,6 +146,14 @@ def clean_null_terms(d):
     return clean
 
 
-class UserAlreadyExists(Exception):
-    pass
+class FieldMissing(Exception):
+    def __str__(self):
+        return "Missing required field"
 
+class RecordNotFound(Exception):
+    def __str__(self):
+        return "Record Not Found"
+    
+class CategoryAlreadyExists(Exception):
+    def __str__(self):
+        return "Category Already Exists"

@@ -29,9 +29,12 @@ class BaseConfig(object):
     APP_DB_NAME = os.getenv("APP_DB_NAME")
     APP_DB_USE_SSL = os.getenv("APP_DB_USE_SSL", "False") in TRUTHY_VALUES
 
+    # SQLALCHEMY_DATABASE_URI = (
+    #     f"mysql://{APP_DB_USER}:%s@{APP_DB_HOST}:{APP_DB_PORT}/{APP_DB_NAME}"
+    #     % urlquote(APP_DB_SECRET)
+    # )
     SQLALCHEMY_DATABASE_URI = (
-        f"mysql://{APP_DB_USER}:%s@{APP_DB_HOST}:{APP_DB_PORT}/{APP_DB_NAME}"
-        % urlquote(APP_DB_SECRET)
+        f"mysql://{APP_DB_USER}:{APP_DB_SECRET}@{APP_DB_HOST}:{APP_DB_PORT}/{APP_DB_NAME}"
     )
 
     # to disable logs of sqlalchemy
@@ -39,8 +42,6 @@ class BaseConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = (
         os.getenv("APP_DB_TRACK_MODIFICATIONS", "False") in TRUTHY_VALUES
     )
-
-    DEFAULT_PASSWORD = os.getenv("DEFAULT_PASSWORD", "CERVELLO9876")
 
 
 class DevelopmentConfig(BaseConfig):

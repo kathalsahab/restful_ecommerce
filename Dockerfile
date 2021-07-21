@@ -9,11 +9,9 @@ RUN pip install pipenv
 RUN pipenv install --system --deploy --ignore-pipfile
 
 COPY ecom ./ecom
-# COPY migrations ./migrations
+COPY migrations ./migrations
 
 
 ENV FLASK_RUN_HOST 0.0.0.0
 
-# CMD flask db upgrade && flask ipdo deploy && flask run
-# CMD flask db upgrade && flask ipdo deploy && flask run
-CMD flask ecom deploy && flask run
+CMD flask db upgrade && flask ecom deploy && flask run

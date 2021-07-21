@@ -1,7 +1,7 @@
 import logging
 from flask.cli import AppGroup, with_appcontext
 
-from ecom.extensions import db, cache
+from ecom.extensions import db
 
 
 ecom_cli = AppGroup("ecom", help="ECOM custom CLI commands")
@@ -23,10 +23,3 @@ def deploy():
     # Create Database
     db.create_all()
 
-    try:
-        cache.clear()  # To clear the cache while deploying the app
-    except Exception as exc:
-        logging.info(
-            "Failed to clear cache. This happends mostly when connection to Redis could not be established. Exception: %s"
-            % (str(exc))
-        )
