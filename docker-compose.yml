@@ -1,0 +1,51 @@
+version: "3.7"
+
+services:
+   backend:
+      container_name: ecom_app
+      build: .
+      ports:
+         - "$FLASK_RUN_PORT:$FLASK_RUN_PORT"
+      networks:
+         - network_ecom
+      env_file:
+         - .env
+      #command: gunicorn -w 5 -t 30 -b 0.0.0.0:5000 "ecom:create_app()"
+      links:
+         - redis
+      # volumes - DEV only - to enable reloading of dev server on file changes
+      volumes:
+         - ./ecom:/app/ecom
+      # restart - DEV only - mysql image is not ready for flask to connect, so it fails 1st time.
+      # This will retry connection for 3 times before throwing errors.
+      restart: on-failure:5
+      depends_on:
+         - mysql
+   mysql:
+      container_name: ecom_mysql
+      image: mysql
+      networks:
+         - network_ecom
+         # environment - DEV only - can be moved to separate env file
+      environment:
+         MYSQL_ROOT_USER: root
+         MYSQL_ROOT_PASSWORD: password
+         MYSQL_DATABASE: ecom
+         # Port 3308 is exposed for DEV only. To connect from host machine to container.
+         # Container to container connection will happen on port 3306
+      ports:
+         - "3308:3306"
+      expose:
+         - "3306"
+         # volumes - DEV only - to retain the stored data while development
+      #volumes:
+      #  - "./docker/volumes/vol_mysql:/var/lib/mysql:rw"
+      command:
+         [
+            "mysqld",
+            "--character-set-server=latin1",
+            "--collation-server=latin1_swedish_ci",
+         ]
+networks:
+   network_ecom:
+      driver: bridge

@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "==1.1.2"
+flask-restx = "==0.3.0"
+pymysql = "*"
+python-dotenv = "*"
+flask-sqlalchemy = "*"
+flask-marshmallow = "*"
+flask-caching = "*"
+marshmallow-sqlalchemy = "*"
+redis = "*"
+flask-cors = "*"
+flask-migrate = "*"
+cryptography = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
