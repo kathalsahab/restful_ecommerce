@@ -6,11 +6,11 @@ from ecom.extensions import db
 
 ecom_cli = AppGroup("ecom", help="ECOM custom CLI commands")
 
+
 @ecom_cli.command(name="create_database")
 def create_database():
     """Create SQL database tables, if not created already."""
     db.create_all()
-
 
 
 @ecom_cli.command(name="deploy")
@@ -22,4 +22,3 @@ def deploy():
 
     # Create Database
     db.create_all()
-

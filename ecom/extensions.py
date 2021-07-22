@@ -23,7 +23,7 @@ def init_extensions(app):
 
     # marshmallow
     mm.init_app(app)
-    
+
     # # migration
     Migrate(app, db, render_as_batch=False)
 

@@ -8,18 +8,6 @@ api = Namespace(
 )
 
 
-def category_get_data():
-
-    parser = reqparse.RequestParser()
-
-    parser.add_argument("category_id", type=int, required=False)
-
-    return parser
-
-
-category_get_data_params = category_get_data()
-
-
 def category_update():
 
     parser = reqparse.RequestParser()
@@ -38,6 +26,7 @@ category_update_params = category_update()
 @api.route("/get_categories", endpoint="categories")
 class Categories(Resource):
     """Class for category dropdown data"""
+
     def get(self):
         "Get list of all categories"
 
@@ -47,7 +36,7 @@ class Categories(Resource):
 @api.route("/category", endpoint="category_management")
 class CategoryManagement(Resource):
     """Class for category CRUD operations"""
-    
+
     def put(self):
         """Get list of all categories with filters"""
         parser = reqparse.RequestParser()
@@ -79,4 +68,3 @@ class CategoryEditDetails(Resource):
 
         args = parser.parse_args()
         return c.delete_category(args["category_id"])
-
