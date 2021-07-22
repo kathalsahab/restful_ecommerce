@@ -8,7 +8,6 @@ from flask_restx import Resource, Namespace, fields
 # application level import
 from . import controllers as c
 
-FILE_NAME = "analysis.pickle"
 # Swagger UI categorising of end points under namespaces
 api = Namespace("Ping", description="Tests weather the server returns a responses")
 

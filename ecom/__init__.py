@@ -6,7 +6,8 @@ import pymysql
 from ecom import extensions
 from ecom.ping.v1 import ping_api_v1
 from ecom.category.v1 import category_api_v1
-from ecom.design.models import Category,Product,CategoryToProductMap
+from ecom.product.v1 import product_api_v1
+from ecom.design.models import Category, Product, CategoryToProductMap
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
@@ -30,9 +31,11 @@ rest_api = RestX_Api(
 
 rest_api.add_namespace(ping_api_v1, path="/v1")
 rest_api.add_namespace(category_api_v1, path="/v1")
+rest_api.add_namespace(product_api_v1, path="/v1")
 
 # mysql driver required for sqlalchemy
 pymysql.install_as_MySQLdb()
+
 
 def create_app():
     """Create the flask app and intialize all the extensions"""
@@ -47,13 +50,12 @@ def create_app():
 
     # load env specific configs
     app.config.from_object(get_config_object_path())
-    print(app.config['SQLALCHEMY_DATABASE_URI'])
+    print(app.config["SQLALCHEMY_DATABASE_URI"])
 
     # initialize all extensions
     extensions.init_extensions(app)
 
     app.cli.add_command(ecom_cli)
-
 
     # 404 route handler
     @app.errorhandler(404)

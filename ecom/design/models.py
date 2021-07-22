@@ -21,9 +21,7 @@ from sqlalchemy.orm import relationship
 
 # Application imports
 from ecom.extensions import db
-from ecom.utils import (
-    RecordNotFound,
-)
+from ecom.utils import RecordNotFound
 from sqlalchemy import and_
 from sqlalchemy.types import String
 
@@ -74,12 +72,7 @@ class Category(db.Model):
 
     @classmethod
     def lookup(cls, category_id):
-        return (
-            cls.query.filter_by(
-                category_id=category_id, is_active=True
-            )
-            .first()
-        )
+        return cls.query.filter_by(category_id=category_id, is_active=True).first()
 
     @property
     def category_parent_name(self):
@@ -96,36 +89,23 @@ class Category(db.Model):
 
     @classmethod
     def get_category_by_name(cls, category_name):
-        return (
-            cls.query.filter_by(
-                category_name=category_name,
-                is_active=True,
-            )
-            .first()
-        )
+        return cls.query.filter_by(category_name=category_name, is_active=True,).first()
 
     @staticmethod
     def get_category_by_single_id(category_id: int):
         return (
             db.session.query(Category)
-            .filter(
-                Category.category_id == category_id,
-                Category.is_active == True,
-            )
+            .filter(Category.category_id == category_id, Category.is_active == True,)
             .first()
         )
 
     @staticmethod
     def create_category(
-        category_name,
-        category_desc=None,
-        parent_id=None,
+        category_name, category_desc=None, parent_id=None,
     ):
         # TODO: Need to check the duplicate record issue
         category = Category.query.filter_by(
-            category_name=category_name,
-            is_active=True,
-            category_parent_id=parent_id,
+            category_name=category_name, is_active=True, category_parent_id=parent_id,
         ).first()
 
         if category:
@@ -146,10 +126,7 @@ class Category(db.Model):
 
     @staticmethod
     def update_category(
-        category_id,
-        category_desc=None,
-        category_name=None,
-        category_parent_id=None,
+        category_id, category_desc=None, category_name=None, category_parent_id=None,
     ):
         category = Category.query.filter_by(category_id=category_id).first()
 
@@ -169,15 +146,74 @@ class Category(db.Model):
 
 
 class Product(db.Model):
-    __tablename__ = 'product'
-    
+    __tablename__ = "product"
+
     product_id = Column(INTEGER, primary_key=True)
     product_name = Column(String(100), nullable=False)
     product_desc = Column(String(1000))
     product_image_URI = Column(String(1000))
     created_date = Column(DateTime, default=datetime.utcnow)
-    updated_date = Column(DateTime, default=datetime.utcnow)
+    updated_date = Column(DateTime, onupdate=datetime.utcnow)
     is_active = Column(Boolean, default=True)
+    product_price = Column(INTEGER, nullable=True)
+    product_quantity = Column(INTEGER, nullable=True)
+
+    @classmethod
+    def lookup(cls, product_id):
+        return Product.query.filter_by(product_id=product_id).first()
+
+    @staticmethod
+    def update_product(
+        product_id,
+        product_name=None,
+        product_desc=None,
+        product_image_URI=None,
+        product_price=None,
+        product_quantity=None,
+    ):
+        product = Product.query.filter_by(product_id=product_id).first()
+
+        if not product:
+            raise RecordNotFound
+
+        if product_name is not None:
+            product.product_name = product_name
+        if product_desc is not None:
+            product.product_desc = product_desc
+        if product_image_URI is not None:
+            product.product_image_URI = product_image_URI
+        if product_price is not None:
+            product.product_price = product_price
+        if product_quantity is not None:
+            product.product_quantity = product_quantity
+
+        db.session.commit()
+        return product
+
+    @staticmethod
+    def create_product(
+        product_name,
+        product_desc=None,
+        product_image_URI=None,
+        product_price=None,
+        product_quantity=None,
+    ):
+        product = Product()
+
+        product.product_name = product_name
+        if product_desc is not None:
+            product.product_desc = product_desc
+        if product_image_URI is not None:
+            product.product_image_URI = product_image_URI
+        if product_price is not None:
+            product.product_price = product_price
+        if product_quantity is not None:
+            product.product_quantity = product_quantity
+
+        db.session.add(product)
+        db.session.commit()
+
+        return product
 
 
 class CategoryToProductMap(db.Model):
@@ -227,9 +263,12 @@ class CategoryToProductMap(db.Model):
         return cls.query.filter_by(category_id=category_id, is_active=True).all()
 
     @staticmethod
-    def create_category_to_product_map(
-        category_id, template_URI_path, product_id, is_active=True
-    ):
+    def create_category_to_product_map(category_id, product_id, is_active=True):
+        category = Category.query.filter_by(
+            category_id=category_id, is_active=True
+        ).first()
+        if not category:
+            return False
         if is_active:
             cat_product_map = CategoryToProductMap.query.filter_by(
                 category_id=category_id, product_id=product_id, is_active=is_active
@@ -240,13 +279,10 @@ class CategoryToProductMap(db.Model):
 
         cat_product_map = CategoryToProductMap()
         cat_product_map.category_id = category_id
-        cat_product_map.module_id = product_id
+        cat_product_map.product_id = product_id
         cat_product_map.is_active = is_active
-        if template_URI_path is not None:
-            cat_product_map.template_URI_path = template_URI_path
 
         db.session.add(cat_product_map)
         db.session.commit()
 
         return cat_product_map
-

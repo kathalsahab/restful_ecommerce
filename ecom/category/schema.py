@@ -21,4 +21,3 @@ class CategorySchema(mm.SQLAlchemySchema):
 
 category_schema_child_list = CategorySchema(many=True)
 category_schema_child_list_single = CategorySchema()
-

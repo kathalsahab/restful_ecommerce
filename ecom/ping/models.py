@@ -4,8 +4,8 @@ from datetime import datetime
 
 class Ping(db.Model):
     __tablename__ = "ping"
-    extend_existing=True
-    
+    extend_existing = True
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False, unique=True)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

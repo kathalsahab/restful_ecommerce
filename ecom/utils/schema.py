@@ -1,8 +1,6 @@
 from ecom.extensions import mm
 
-from ecom.design.models import (
-    Category,
-)
+from ecom.design.models import Category
 
 
 class CategorySchema(mm.SQLAlchemyAutoSchema):

@@ -20,7 +20,6 @@ class BaseConfig(object):
     # for flask restx abort
     ERROR_INCLUDE_MESSAGE = False
 
-
     # sql db specific
     APP_DB_USER = os.getenv("APP_DB_USER")
     APP_DB_SECRET = os.getenv("APP_DB_SECRET")
@@ -33,9 +32,7 @@ class BaseConfig(object):
     #     f"mysql://{APP_DB_USER}:%s@{APP_DB_HOST}:{APP_DB_PORT}/{APP_DB_NAME}"
     #     % urlquote(APP_DB_SECRET)
     # )
-    SQLALCHEMY_DATABASE_URI = (
-        f"mysql://{APP_DB_USER}:{APP_DB_SECRET}@{APP_DB_HOST}:{APP_DB_PORT}/{APP_DB_NAME}"
-    )
+    SQLALCHEMY_DATABASE_URI = f"mysql://{APP_DB_USER}:{APP_DB_SECRET}@{APP_DB_HOST}:{APP_DB_PORT}/{APP_DB_NAME}"
 
     # to disable logs of sqlalchemy
     SQLALCHEMY_ECHO = False
