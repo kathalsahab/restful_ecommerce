@@ -66,7 +66,7 @@ class Category(db.Model):
             ),
         ),
     )
-    childs = relationship(
+    child_categories = relationship(
         "Category", remote_side=[category_parent_id], uselist=True, viewonly=True
     )
 
