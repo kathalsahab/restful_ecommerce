@@ -15,7 +15,7 @@ class CategorySchema(mm.SQLAlchemySchema):
     created_date = mm.auto_field()
     is_active = mm.auto_field()
     category_parent_id = mm.auto_field()
-    childs = fields.Nested("self", many=True, exclude=("childs",))
+    child_categories = fields.Nested("self", many=True, exclude=("child_categories",))
     category_parent_name = fields.String()
 
 
