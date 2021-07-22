@@ -112,55 +112,6 @@ Development, Testing and Production configurations are separated in the `ecom/co
 
 While development, required environment variables should be set in `.env` file which will be automatically loaded into the OS.
 
-### Makefile
-
-Start the server
-
-```sh
-make sonar_server
-```
-
-Stop the server after use
-
-```sh
-make sonar_server_down
-```
-
-### Docker Compose
-
-Alternatively, you can directly execute `docker-compose` commands that are written in Makefile.
-
-Build and Run the Sonar Server
-
-```sh
-docker-compose -f docker-compose.sonarqube.yml up -d
-```
-
-Stop the Server after use
-
-```sh
-docker-compose -f docker-compose.sonarqube.yml down
-```
-
-### Makefile
-
-Start the client
-
-```sh
-make sonar_client
-```
-
-### Docker Compose
-
-Build and Run the Sonar Server
-
-```sh
-docker-compose -f docker-compose.sonarqube-scanner.yml up
-```
-
-<br>
-<br>
-
 ---
 
 # Docker Commands Reference
